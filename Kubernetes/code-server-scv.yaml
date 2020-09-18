@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: code-server-svc
+  namespace: default
+spec:
+  selector:
+    app: code-server
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    name: code-server-main
+    port: 80
+    targetPort: 8080

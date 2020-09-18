@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: code-server
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: code-server
+  template:
+    metadata:
+      labels:
+        app: code-server
+    spec:
+      containers:
+      - name: code-server
+        image: codercom/code-server:3.4.1
+        #Los invito a usar mi imagen personalizada de code-server.
+        #image: aleleba/code-server:2.0.2
+        imagePullPolicy: Always
+        #Pueden exponer cualquier puerto que necesiten que use su aplicación. El Puerto 8080 tienen que exponerlo siempre
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "2"
+          limits:
+            memory: "1.2Gi"
+            cpu: "2.2"
+        env:
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: code-server-secret
+              key: PASSWORD
+        #Habilitar si desean conectarse a docker de host.
+        #volumeMounts:
+        #- mountPath: "/var/run/docker.sock"
+          #name: dockersock
+      #volumes:
+      #- name: dockersock
+        #hostPath:
+          #path: /var/run/docker.sock
